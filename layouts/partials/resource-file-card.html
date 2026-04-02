@@ -1,0 +1,42 @@
+{{- $resource    := .resource -}}
+{{- $sectionPath := .sectionPath -}}
+{{- $resource    := .resource -}}
+
+{{- $fileName    := $resource.filename -}}
+{{- $fileExt     := path.Ext $fileName -}}
+
+{{- $label := "Download" -}}
+{{- if eq $fileExt ".pdf"  -}}{{- $label = "Download PDF"         -}}{{- end -}}
+{{- if eq $fileExt ".xlsx" -}}{{- $label = "Download Spreadsheet" -}}{{- end -}}
+
+{{- $downloadUrl := "" -}}
+{{- if $resource.googleDriveId -}}
+    {{- $downloadUrl = printf "https://drive.usercontent.google.com/download?id=%s&export=download&authuser=0&confirm=t" $resource.googleDriveId -}}
+{{- else if $resource.downloadUrl -}}
+    {{- $downloadUrl = $resource.downloadUrl -}}
+{{- else -}}
+    {{- warnf "No url or googleDriveId for resource: %s" $resource.title -}}
+{{- end -}}
+
+{{- $href := "" -}}
+{{- $result := try (resources.GetRemote $downloadUrl (dict "headers" (dict "Accept" (slice "application/octet-stream")))) -}}
+{{- with $result.Err -}}
+    {{- warnf "Could not fetch %q: %s" $resource.title . -}}
+{{- else -}}
+    {{- with $result.Value -}}
+        {{- $published := . | resources.Copy (printf "%s/%s" $sectionPath $fileName) -}}
+        {{- $href = $published.RelPermalink -}}
+    {{- end -}}
+{{- end -}}
+
+{{ if $href }}
+<div class="col">
+    <div class="card h-100 resource-file-card">
+        <div class="card-body py-3 d-flex flex-column">
+            <div class="fw-semibold mb-3">{{ $resource.title }}</div>
+            {{ if $resource.description }}<p class="text-muted small mb-3">{{ $resource.description }}</p>{{ end }}
+            <a href="{{ $href }}" class="btn btn-sm btn-outline-primary mt-auto">{{ $label }}</a>
+        </div>
+    </div>
+</div>
+{{ end }}

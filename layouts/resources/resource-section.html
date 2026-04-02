@@ -1,0 +1,48 @@
+{{ define "main" }}
+
+<div class="mb-3 pb-2 border-bottom">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb small mb-1">
+            <li class="breadcrumb-item"><a href="/resources/">Resources</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ .Title }}</li>
+        </ol>
+    </nav>
+    <h1 class="mb-1">{{ .Title }}</h1>
+    {{ if .Params.headline }}
+    <p class="fs-5 text-accent fw-medium mb-0">{{ .Params.headline }}</p>
+    {{ end }}
+</div>
+
+{{- $sectionPath := strings.TrimPrefix "/" (strings.TrimSuffix "/" .RelPermalink) -}}
+
+{{ if .Params.sections }}
+    {{ range .Params.sections }}
+    <div class="mb-4">
+        <h5 class="fw-semibold border-bottom pb-2 mb-3">{{ .title }}</h5>
+        {{- $subSectionPath := printf "%s/%s" $sectionPath (urlize .title) -}}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+            {{ range .resources }}
+            {{ template "resource-card" (dict "resource" . "sectionPath" $subSectionPath) }}
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+{{ else if .Params.resources }}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+    {{ range .Params.resources }}
+    {{ template "resource-card" (dict "resource" . "sectionPath" $sectionPath) }}
+    {{ end }}
+</div>
+{{ end }}
+
+{{ end }}
+
+{{- define "resource-card" -}}
+{{- $resource    := .resource -}}
+{{- $sectionPath := .sectionPath -}}
+{{- if or $resource.googleDriveId $resource.downloadUrl -}}
+{{ partial "resource-file-card" (dict "resource" $resource "sectionPath" $sectionPath) }}
+{{- else if $resource.youtubeId -}}
+{{ partial "resource-video-card" (dict "resource" $resource "sectionPath" $sectionPath) }}
+{{- end -}}
+{{- end -}}
