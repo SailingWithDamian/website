@@ -1,0 +1,52 @@
+{{ define "main" }}
+
+<div class="mb-3 pb-2 border-bottom">
+    <h1 class="mb-1">{{ .Title }}</h1>
+    {{ if .Params.headline }}
+    <p class="fs-5 text-accent fw-medium mb-0">{{ .Params.headline }}</p>
+    {{ end }}
+</div>
+
+{{ if .Params.photo }}
+<div class="boat-hero-wrap rounded overflow-hidden mb-3">
+    <img src="{{ .Params.photo }}" alt="{{ .Title }}" class="boat-hero-img">
+</div>
+{{ end }}
+
+{{ if .Params.specs }}
+<div class="row g-0 rounded border overflow-hidden mb-3">
+    {{ range .Params.specs }}
+    <div class="col stat-cell text-center py-3 px-2 bg-light">
+        <div class="stat-value fw-bold">{{ .value }}</div>
+        <div class="stat-label text-muted text-uppercase">{{ .label }}</div>
+    </div>
+    {{ end }}
+</div>
+{{ end }}
+
+{{ if .Content }}
+<div class="mb-3 pb-4 border-bottom page-content">
+    {{ .Content }}
+</div>
+{{ end }}
+
+{{ if .Params.equipment }}
+<div class="mb-3">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        {{ range .Params.equipment }}
+        <div class="col">
+            <div class="card h-100 qual-card">
+                <div class="card-body py-3">
+                    <div class="fw-semibold mb-2">{{ .title }}</div>
+                    <ul class="text-muted small mb-0 ps-3">
+                        {{ range .items }}<li>{{ . }}</li>{{ end }}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+
+{{ end }}

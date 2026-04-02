@@ -66,6 +66,19 @@ a:hover {
     border-left: 4px solid var(--clr-accent) !important;
 }
 
+.boat-hero-wrap {
+    max-height: 480px;
+    overflow: hidden;
+}
+
+.boat-hero-img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
 .site-footer {
     background-color: #f8f5fc;
     border-top: 1px solid #e5d0f5;
