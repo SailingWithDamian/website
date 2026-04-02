@@ -1,2 +1,118 @@
 {{ define "main" }}
+
+<div class="row align-items-center mb-3 pb-4 border-bottom">
+    <div class="col-auto">
+        {{ if .Params.photo }}
+            <img src="{{ .Params.photo }}" alt="{{ .Title }}" class="profile-photo rounded-circle">
+        {{ else }}
+            <div class="profile-photo-placeholder rounded-circle d-flex align-items-center justify-content-center text-muted">
+                <span class="small">Photo</span>
+            </div>
+        {{ end }}
+    </div>
+    <div class="col">
+        <h1 class="mb-1">{{ .Title }}</h1>
+        <p class="fs-5 text-accent fw-medium mb-1">{{ .Params.headline }}</p>
+    </div>
+</div>
+
+{{ if .Params.stats }}
+<div class="row g-0 rounded border overflow-hidden mb-3">
+    {{ range .Params.stats }}
+    <div class="col stat-cell text-center py-3 px-2 bg-light">
+        <div class="stat-value fw-bold">{{ .value }}</div>
+        <div class="stat-label text-muted text-uppercase">{{ .label }}</div>
+    </div>
+    {{ end }}
+</div>
+{{ end }}
+
+{{ if .Params.qualifications }}
+<div class="mb-3">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        {{ range .Params.qualifications }}
+        <div class="col">
+            <div class="card h-100 qual-card">
+                <div class="card-body py-3">
+                    <div class="fw-semibold mb-1">{{ .title }}</div>
+                    {{ if .detail }}
+                    <div class="text-muted small">{{ delimit .detail " · " }}</div>
+                    {{ end }}
+                    {{ if .long_detail }}
+                    <ul class="text-muted small mb-0 ps-3">
+                        {{ range .long_detail }}<li>{{ . }}</li>{{ end }}
+                    </ul>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+
+{{ if .Params.available_for }}
+<div class="pt-4 border-top mb-3">
+    <h2 class="mb-2">Available For</h2>
+    <ul>
+        {{ range .Params.available_for }}<li>{{ . }}</li>{{ end }}
+    </ul>
+</div>
+{{ end }}
+
+{{ if .Params.contact }}
+{{- $maskKey := .Site.Params.turnstile_site_key -}}
+<div class="cf-turnstile"
+     data-sitekey="{{ .Site.Params.turnstile_site_key }}"
+     data-callback="reveal_contact_block"></div>
+
+<div class="pt-4 border-top mb-3" id="contact-block" style="display: none">
+    <h2 class="mb-2">Contact</h2>
+    <ul class="list-unstyled" id="contact-details">
+        {{ range .Params.contact }}
+        <li class="mb-1">
+            <span class="text-muted small d-block">{{ .label }}</span>
+            <a class="obf"
+               data-h="{{ partial "mask-value.html" (dict "value" .url "key" $maskKey) }}"
+               data-v="{{ partial "mask-value.html" (dict "value" .value "key" $maskKey) }}"></a>
+        </li>
+        {{ end }}
+    </ul>
+</div>
+{{ end }}
+
+{{ if .Content }}
+<div class="pt-4 border-top bio-content">
+    {{ .Content }}
+</div>
+{{ end }}
+
+{{ end }}
+
+{{ define "scripts" }}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+let _substitution_key = '{{ .Site.Params.turnstile_site_key }}';
+function _unmask_value(hex) {
+    var out = '';
+    for (var i = 0; i < hex.length; i += 2) {
+        var b = parseInt(hex.substr(i, 2), 16);
+        var k = _substitution_key.charCodeAt((i / 2) % _substitution_key.length);
+        out += String.fromCharCode((b - k + 256) % 256);
+    }
+    return out;
+}
+function reveal_contact_block() {
+    document.getElementById('contact-details').querySelectorAll('a.obf').forEach(function(el) {
+        if (el.dataset.v) {
+            el.textContent = _unmask_value(el.dataset.v);
+        }
+
+        if (el.dataset.h) {
+            el.href = _unmask_value(el.dataset.h);
+        }
+    });
+    document.getElementById('contact-block').style.display = 'block';
+}
+</script>
 {{ end }}

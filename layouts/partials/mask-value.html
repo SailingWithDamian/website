@@ -1,0 +1,10 @@
+{{- $value := .value | base64Decode -}}
+{{- $key := .key -}}
+{{- $result := "" -}}
+{{- range seq (len $value) -}}
+  {{- $i  := sub . 1 -}}
+  {{- $c  := index $value $i -}}
+  {{- $kb := index $key (mod $i (len $key)) -}}
+  {{- $result = printf "%s%02x" $result (mod (add (int $c) (int $kb)) 256) -}}
+{{- end -}}
+{{- $result -}}
