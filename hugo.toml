@@ -1,0 +1,4 @@
+baseURL = "https://sailingwithdamian.eu/"
+languageCode = "en-gb"
+title = "Sailing with Damian"
+disableKinds = ["RSS"]
