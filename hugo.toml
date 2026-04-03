@@ -22,6 +22,10 @@ mediaTypes = ['^application/octet-stream$']
     url = "/boat/"
     weight = 2
   [[menu.main]]
+    name = "Tips & Tricks"
+    url = "/tips-and-tricks/"
+    weight = 3
+  [[menu.main]]
     name = "Resources"
     url = "/resources/"
-    weight = 3
+    weight = 4

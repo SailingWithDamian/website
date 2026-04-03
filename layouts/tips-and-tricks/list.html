@@ -1,0 +1,42 @@
+{{ define "head" }}
+{{- $posts := slice -}}
+{{- range .Pages -}}
+  {{- $post := dict "@type" "BlogPosting" "headline" .Title "url" .Permalink "datePublished" (.Date.Format "2006-01-02") -}}
+  {{- with .Summary -}}{{- $post = merge $post (dict "description" .) -}}{{- end -}}
+  {{- $posts = $posts | append $post -}}
+{{- end -}}
+{{- $schema := dict "@context" "https://schema.org" "@type" "Blog" "name" .Title "url" .Permalink "blogPost" $posts -}}
+{{- with .Params.headline -}}{{- $schema = merge $schema (dict "description" .) -}}{{- end -}}
+{{- $json := printf "%s" ($schema | jsonify) -}}
+{{- printf "<script type=\"application/ld+json\">%s</script>" $json | safeHTML }}
+{{ end }}
+
+{{ define "main" }}
+
+<div class="mb-4 pb-2 border-bottom">
+    <h1 class="mb-1">{{ .Title }}</h1>
+    {{ if .Params.headline }}
+    <p class="fs-5 text-accent fw-medium mb-0">{{ .Params.headline }}</p>
+    {{ end }}
+</div>
+
+{{ if .Pages }}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {{ range .Pages }}
+    <div class="col">
+        <div class="card h-100 qual-card">
+            <div class="card-body py-3 d-flex flex-column">
+                <div class="fw-semibold mb-1">{{ .Title }}</div>
+                <p class="text-muted small mb-2">{{ .Date.Format "2 January 2006" }}</p>
+                {{ with .Summary }}<p class="text-body small mb-3">{{ . }}</p>{{ end }}
+                <a href="{{ .Permalink }}" class="btn btn-sm btn-outline-primary mt-auto">Read more</a>
+            </div>
+        </div>
+    </div>
+    {{ end }}
+</div>
+{{ else }}
+<p class="text-muted">No posts yet.</p>
+{{ end }}
+
+{{ end }}

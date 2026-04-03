@@ -1,0 +1,24 @@
+{{ define "head" }}
+{{- $schema := dict "@context" "https://schema.org" "@type" "BlogPosting" "headline" .Title "url" .Permalink "datePublished" (.Date.Format "2006-01-02") "author" (dict "@type" "Person" "name" .Site.Params.author) -}}
+{{- with .Summary -}}{{- $schema = merge $schema (dict "description" .) -}}{{- end -}}
+{{- $json := printf "%s" ($schema | jsonify) -}}
+{{- printf "<script type=\"application/ld+json\">%s</script>" $json | safeHTML }}
+{{ end }}
+
+{{ define "main" }}
+<article>
+    <header class="mb-4 pb-3 border-bottom">
+        <nav aria-label="breadcrumb" class="mb-2">
+            <ol class="breadcrumb small mb-0">
+                <li class="breadcrumb-item"><a href="/tips-and-tricks/">Tips &amp; Tricks</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ .Title }}</li>
+            </ol>
+        </nav>
+        <h1 class="mb-1">{{ .Title }}</h1>
+        <p class="text-muted small mb-0">{{ .Date.Format "2 January 2006" }}</p>
+    </header>
+    <div class="page-content">
+        {{ .Content }}
+    </div>
+</article>
+{{ end }}
