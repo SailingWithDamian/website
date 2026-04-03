@@ -54,6 +54,5 @@ stats:
   - value: "300+ days"
     label: "Instructing at sea"
   - value: "3"
-    label: "Ocean passages since 2017"
+    label: "Ocean passages since 2022"
 ---
-
