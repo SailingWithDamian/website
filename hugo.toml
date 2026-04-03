@@ -4,7 +4,7 @@ title = "Sailing with Damian"
 disableKinds = ["RSS", "taxonomy", "term"]
 
 [params]
-  description = "RYA Yachtmaster Instructor and professional skipper based in the Netherlands"
+  description = "RYA Yachtmaster instructor and professional skipper based in the Netherlands, available for sailing tuition, yacht deliveries, and professional skippering."
   author = "Damian Zaremba"
   email = "damian@sailingwithdamian.eu"
   turnstile_site_key = "0x4AAAAAACzlrWRlqvVtAQk9"
