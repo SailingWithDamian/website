@@ -1,19 +1,19 @@
 ---
-title: "Checklists"
+title: "Skipper Checklists"
 layout: "resource-section"
 
 sections:
   - title: "Vessel Operation"
     resources:
-      - title: "Vessel Pre-Departure"
+      - title: "Pre Departure"
         googleDriveId: 1R-v_fDLCwaaHNUxV0lnn-G2bJm3rPJcJ
-        filename: "vessel-pre-departure.pdf"
+        filename: "Pre Departure.pdf"
         
-      - title: "Vessel Departure"
+      - title: "Departure"
         googleDriveId: 1R1oAzXqWZiDFYvOrTLRc524HGyg7mNkl
-        filename: "vessel-departure.pdf"
+        filename: "Departure.pdf"
         
-      - title: "Vessel Pre-Arrival"
+      - title: "Pre-Arrival"
         googleDriveId: 1R05OBibHbVDfCdpY8PCSrgjnIZezC2Bl
-        filename: "vessel-pre-arrival.pdf"
+        filename: "Pre Arrival.pdf"
 ---
