@@ -13,6 +13,31 @@
 
 {{ define "main" }}
 
+{{- if .Params.hidden_files -}}
+{{- $sectionPath := strings.TrimPrefix "/" (strings.TrimSuffix "/" .RelPermalink) -}}
+{{- range .Params.hidden_files -}}
+  {{- $file := . -}}
+  {{- $downloadUrl := "" -}}
+  {{- if $file.googleDriveId -}}
+    {{- $downloadUrl = printf "https://drive.usercontent.google.com/download?id=%s&export=download&authuser=0&confirm=t" $file.googleDriveId -}}
+  {{- else if $file.downloadUrl -}}
+    {{- $downloadUrl = $file.downloadUrl -}}
+  {{- end -}}
+  {{- if $downloadUrl -}}
+    {{- $result := try (resources.GetRemote $downloadUrl (dict "headers" (dict "Accept" (slice "application/octet-stream")))) -}}
+    {{- with $result.Err -}}
+      {{- warnf "Could not fetch hidden file %q: %s" $file.filename . -}}
+    {{- else -}}
+      {{- with $result.Value -}}
+        {{- $published := . | resources.Copy (printf "%s/%s" $sectionPath $file.filename) -}}
+        <!-- {{- $published.RelPermalink -}} -->
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+
+
 <div class="mb-3 pb-2 border-bottom">
     <h1 class="mb-1">{{ .Title }}</h1>
     {{ if .Params.headline }}
