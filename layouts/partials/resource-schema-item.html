@@ -1,0 +1,21 @@
+{{- $r := .resource -}}
+{{- $sectionPath := .sectionPath -}}
+{{- $item := dict -}}
+{{- if or $r.googleDriveId $r.downloadUrl -}}
+  {{- $downloadUrl := "" -}}
+  {{- if $r.googleDriveId -}}
+    {{- $downloadUrl = printf "https://drive.usercontent.google.com/download?id=%s&export=download&authuser=0&confirm=t" $r.googleDriveId -}}
+  {{- else -}}
+    {{- $downloadUrl = $r.downloadUrl -}}
+  {{- end -}}
+  {{- $result := try (resources.GetRemote $downloadUrl (dict "headers" (dict "Accept" (slice "application/octet-stream")))) -}}
+  {{- with $result.Value -}}
+    {{- $published := . | resources.Copy (printf "%s/%s" $sectionPath $r.filename) -}}
+    {{- $item = dict "@type" "DigitalDocument" "name" $r.title "url" $published.Permalink -}}
+    {{- with $r.description -}}{{- $item = merge $item (dict "description" .) -}}{{- end -}}
+  {{- end -}}
+{{- else if $r.youtubeId -}}
+  {{- $item = dict "@type" "VideoObject" "name" $r.title "embedUrl" (printf "https://www.youtube.com/embed/%s" $r.youtubeId) -}}
+  {{- with $r.description -}}{{- $item = merge $item (dict "description" .) -}}{{- end -}}
+{{- end -}}
+{{- return $item -}}

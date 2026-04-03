@@ -7,6 +7,13 @@
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    {{- $navItems := slice -}}
+    {{- range .Site.Menus.main -}}
+      {{- $navItems = $navItems | append (dict "@context" "https://schema.org" "@type" "SiteNavigationElement" "name" .Name "url" (.URL | absURL)) -}}
+    {{- end -}}
+    {{- $json := printf "%s" ($navItems | jsonify) }}
+    {{ printf "<script type=\"application/ld+json\">%s</script>" $json | safeHTML }}
+    {{- block "head" . }}{{- end }}
 </head>
 <body class="d-flex flex-column min-vh-100">
     {{- partial "header.html" . -}}

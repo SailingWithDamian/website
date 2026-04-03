@@ -1,3 +1,26 @@
+{{ define "head" }}
+{{- $sectionPath := strings.TrimPrefix "/" (strings.TrimSuffix "/" .RelPermalink) -}}
+{{- $hasPart := slice -}}
+{{- if .Params.sections -}}
+  {{- range .Params.sections -}}
+    {{- $subSectionPath := printf "%s/%s" $sectionPath (urlize .title) -}}
+    {{- range .resources -}}
+      {{- $item := partial "resource-schema-item.html" (dict "resource" . "sectionPath" $subSectionPath) -}}
+      {{- if $item -}}{{- $hasPart = $hasPart | append $item -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- else if .Params.resources -}}
+  {{- range .Params.resources -}}
+    {{- $item := partial "resource-schema-item.html" (dict "resource" . "sectionPath" $sectionPath) -}}
+    {{- if $item -}}{{- $hasPart = $hasPart | append $item -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $schema := dict "@context" "https://schema.org" "@type" "CollectionPage" "name" .Title "url" .Permalink "hasPart" $hasPart -}}
+{{- with .Params.headline -}}{{- $schema = merge $schema (dict "description" .) -}}{{- end -}}
+{{- $json := printf "%s" ($schema | jsonify) }}
+{{ printf "<script type=\"application/ld+json\">%s</script>" $json | safeHTML }}
+{{ end }}
+
 {{ define "main" }}
 
 <div class="mb-3 pb-2 border-bottom">

@@ -1,3 +1,16 @@
+{{ define "head" }}
+{{- $hasPart := slice -}}
+{{- range .Params.sections -}}
+  {{- $part := dict "@type" "CollectionPage" "name" .title "url" (.url | absURL) -}}
+  {{- with .description -}}{{- $part = merge $part (dict "description" .) -}}{{- end -}}
+  {{- $hasPart = $hasPart | append $part -}}
+{{- end -}}
+{{- $schema := dict "@context" "https://schema.org" "@type" "CollectionPage" "name" .Title "url" .Permalink "hasPart" $hasPart -}}
+{{- with .Params.headline -}}{{- $schema = merge $schema (dict "description" .) -}}{{- end -}}
+{{- $json := printf "%s" ($schema | jsonify) }}
+{{ printf "<script type=\"application/ld+json\">%s</script>" $json | safeHTML }}
+{{ end }}
+
 {{ define "main" }}
 
 <div class="mb-3 pb-2 border-bottom">
