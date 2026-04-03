@@ -1,5 +1,6 @@
 ---
 title: "Vista Mar"
+description: "A Bavaria 44-4 Custom Line launched in 2004, Vista Mar serves as a liveaboard cruiser, sailed across the North Atlantic and the European seaboard."
 headline: "Bavaria 44-4 Custom Line"
 photo: "/images/boat.jpg"
 specs:

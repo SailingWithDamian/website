@@ -1,5 +1,6 @@
 ---
 title: "Damian Zaremba"
+description: "Commercially endorsed RYA Yachtmaster Instructor and professional skipper, based in the Netherlands and available for tuition, deliveries, and skippering."
 headline: "RYA Yachtmaster Instructor & Ocean Skipper"
 photo: "/images/damian.jpg"
 qualifications:
