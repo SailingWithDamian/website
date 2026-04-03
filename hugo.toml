@@ -1,7 +1,7 @@
 baseURL = "https://sailingwithdamian.eu/"
 languageCode = "en-gb"
 title = "Sailing with Damian"
-disableKinds = ["RSS"]
+disableKinds = ["RSS", "taxonomy", "term"]
 
 [params]
   description = "RYA Yachtmaster Instructor and professional skipper based in the Netherlands"
